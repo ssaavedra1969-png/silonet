@@ -595,8 +595,8 @@ async function syncPush(){
     const u='?user='+currentUser();
     const salt=localStorage.getItem(KEY_SALT);
     const pkt=localStorage.getItem(KEY_VAULT);
-    if(salt)await fetch(API_BASE+'/salt',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({salt})});
-    if(pkt)await fetch(API_BASE+'/vault',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.parse(pkt)});
+    if(salt)await fetch(API_BASE+'/salt'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({salt})});
+    if(pkt)await fetch(API_BASE+'/vault'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:pkt});
   }catch{}
 }
 
