@@ -1,0 +1,134 @@
+[
+  {
+    "service": "POWERBI (PER)",
+    "url": "https://app.powerbi.com/home?experience=power-bi"
+  },
+  {
+    "service": "POWERBI (EMP)",
+    "url": "https://app.powerbi.com/home?experience=power-bi"
+  },
+  {
+    "service": "NETFLIX",
+    "url": "https://www.netflix.com/browse"
+  },
+  {
+    "service": "NATURGY",
+    "url": "https://ov.naturgy.com.ar/ingreso"
+  },
+  {
+    "service": "MOVISTAR",
+    "url": "https://app.movistar.com.ar/consumptions"
+  },
+  {
+    "service": "MODO",
+    "url": "app del Celular"
+  },
+  {
+    "service": "MERCADO LIBRE",
+    "url": "https://www.mercadolibre.com.ar/"
+  },
+  {
+    "service": "MERCADO DE PAGO",
+    "url": "https://www.mercadopago.com.ar/banking"
+  },
+  {
+    "service": "IVESS",
+    "url": "https://micuenta.aguaparatuvida.com.ar/dashboard"
+  },
+  {
+    "service": "HOYTS",
+    "url": "https://www.cinemark.com.ar/?gad_source=1&gad_campaignid=17439731004&gbraid=0AAAAAC_nbNPKlEsKhCY5pW5kYrxKGiMF3&gclid=CjwKCAjwpqHTBhAcEiwAj2AfumL8GMR_48NnyBbKZIBL8c_eI_USfF_n-j16J7gU4WBFlGx4kg-FbxoCTowQAvD_BwE"
+  },
+  {
+    "service": "GMAIL letraymusica1969",
+    "url": "https://mail.google.com/mail"
+  },
+  {
+    "service": "GMAIL sancoumell",
+    "url": "https://mail.google.com/mail"
+  },
+  {
+    "service": "GMAIL ssaavedra1969",
+    "url": "https://mail.google.com/mail"
+  },
+  {
+    "service": "GMAIL webfireone",
+    "url": "https://mail.google.com/mail"
+  },
+  {
+    "service": "GMAIL elcine2025on",
+    "url": "https://mail.google.com/mail"
+  },
+  {
+    "service": "Banco Galicia",
+    "url": "https://onlinebanking.bancogalicia.com.ar/login"
+  },
+  {
+    "service": "GALENO SEGUROS",
+    "url": "https://www.galenoseguros.com.ar/mis_polizas/"
+  },
+  {
+    "service": "GALENO",
+    "url": "https://www.galeno.com.ar/socio/home"
+  },
+  {
+    "service": "FAVALORO",
+    "url": "https://portalweb.fundacionfavaloro.org/confirmarturno"
+  },
+  {
+    "service": "FACEBOOK",
+    "url": "https://www.facebook.com/home.php"
+  },
+  {
+    "service": "DIM",
+    "url": "https://portal.dim.com.ar/"
+  },
+  {
+    "service": "CUENTA DNI",
+    "url": "https://www.bancoprovincia.bancainternet.com.ar/spa/"
+  },
+  {
+    "service": "Club de beneficios",
+    "url": "https://clubdebeneficios.com/"
+  },
+  {
+    "service": "CLARO",
+    "url": "https://ingreso.claro.com.ar/"
+  },
+  {
+    "service": "PRIMEVIDEO",
+    "url": "https://www.primevideo.com/region/na/storefront?"
+  },
+  {
+    "service": "PARAMOUNT+",
+    "url": "https://www.paramountplus.com/"
+  },
+  {
+    "service": "DISNEY+",
+    "url": "https://www.disneyplus.com/es-419/home"
+  },
+  {
+    "service": "Centro Medico Deragopyan",
+    "url": "https://portal.deragopyan.com.ar/Appointment/Index"
+  },
+  {
+    "service": "CABIFY",
+    "url": "https://cabify.com/app/order"
+  },
+  {
+    "service": "ASSICS",
+    "url": "https://www.asics.com.ar/_secure/account#/orders"
+  },
+  {
+    "service": "ARCA - AFIP",
+    "url": "https://www.afip.gob.ar/landing/default.asp"
+  },
+  {
+    "service": "ARBA",
+    "url": "https://sso.arba.gov.ar/Login/login?service=https%3A//www.arba.gov.ar/ContribGerenciamiento/IngresoCuit/IngresaCUIT.asp"
+  },
+  {
+    "service": "APPLE TV +",
+    "url": "https://tv.apple.com/"
+  }
+]
