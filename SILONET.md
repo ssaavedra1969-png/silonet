@@ -6,8 +6,8 @@ App web de gestión de contraseñas, totalmente offline, cifrada con AES-256-GCM
 
 ## Arquitectura general
 
-- **Single HTML file**: toda la app vive en un único `index.html` (y `mobil.html` para la versión mobile). No hay frameworks, no hay bundlers, no hay dependencias externas. Funciona abriendo el archivo directamente desde el disco (`file://`) o sirviéndolo con cualquier HTTP server.
-- **Cifrado cliente**: nunca salen datos sin cifrar del navegador. La clave se deriva de la contraseña maestra + salt mediante PBKDF2 (SHA-256). El cifrado es AES-256-GCM con IV aleatorio de 12 bytes.
+- **Single HTML file**: toda la app vive en un único `index.html` responsivo (desktop y mobile en el mismo layout mediante CSS media queries). No hay frameworks, no hay bundlers, no hay dependencias externas. Funciona abriendo el archivo directamente desde el disco (`file://`) o sirviéndolo con cualquier HTTP server.
+- **Cifrado cliente**: nunca salen datos sin cifrar del navegador. La clave se deriva de la contraseña maestra + salt mediante SHA-256. El cifrado es AES-256-GCM con IV aleatorio de 12 bytes.
 - **Persistencia local**: `localStorage` guarda el salt (`claves_salt_{user}`) y el vault cifrado (`claves_vault_{user}`). `sessionStorage` guarda el draft al editar una entrada.
 - **Sincronización cloud**: cuando se sirve desde Vercel, un `fetch('/api/health')` detecta que la API está disponible y activa el modo `useApi`. Cada vez que se guarda, además de localStorage, hace un PUT a los endpoints de Vercel que escriben en un GitHub Gist privado.
 
@@ -15,8 +15,7 @@ App web de gestión de contraseñas, totalmente offline, cifrada con AES-256-GCM
 
 ## Versionado
 
-- `VERSION = '1.2.0'`
-- Fechas de modificaciones no trackeadas en el código (ver git log).
+- `VERSION = '1.3.0'`
 
 ---
 
@@ -24,8 +23,7 @@ App web de gestión de contraseñas, totalmente offline, cifrada con AES-256-GCM
 
 ```
 silonet/
-├── index.html          # App principal (desktop)
-├── mobil.html          # Versión mobile (touch optimizada)
+├── index.html          # App única (responsive: desktop + mobile)
 ├── vercel.json         # Config de deploy en Vercel
 ├── setup.ps1           # Script para crear el gist inicial
 ├── .gitignore
@@ -46,7 +44,11 @@ silonet/
 - Cada usuario tiene su propio salt, su propio vault cifrado con su propia contraseña maestra, y sus propios archivos en el gist.
 - `currentUser()`: lee de localStorage `claves_last_user` (default `'1'`).
 - `setUser(id)`: guarda el usuario activo y actualiza `KEY_SALT` y `KEY_VAULT` a `claves_salt_{id}` y `claves_vault_{id}`.
-- Al cambiar de usuario, se resetea el formulario de login y se llama a `checkState()` para determinar si ese usuario ya tiene vault o hay que crear uno nuevo.
+- Al cambiar de usuario:
+  1. Se resetea el formulario de login.
+  2. Si `useApi` está activo, se llama a `syncPull()` para descargar los datos de ese usuario desde el gist.
+  3. Se llama a `checkState()` para determinar si el usuario ya tiene vault o hay que crear uno nuevo.
+- `init()` migra datos viejos (`claves_salt` → `claves_salt_1`, `claves_vault` → `claves_vault_1`) para no perder datos al actualizar desde versiones pre-multi-usuario.
 
 ### 🔑 Derivación de clave
 
@@ -68,10 +70,14 @@ silonet/
 - `importFromCSV(text)`: parsea CSV con columnas `service,username,password,note,url` y las importa como entradas.
 - `exportCSV()`: genera un CSV descargable con todas las entradas.
 
-### 📱 Vista mobile
+### 📱 Diseño responsive (mobile)
 
-- `mobil.html`: misma lógica que `index.html` pero con layout siempre single-column, panel de detalle como overlay fijo, targets táctiles más grandes, y sin breakpoints responsive.
-- Compatible con iOS y Android. Se puede agregar a la pantalla de inicio como bookmark.
+- Un único `index.html` se adapta a mobile vía `@media(max-width:820px)`:
+  - Layout single-column (`.app-body{grid-template-columns:1fr}`).
+  - Panel de detalle como overlay fijo (`.panel-detail{position:fixed;inset:56px 0 0 0;z-index:10}`) que se abre con la clase `.open`.
+  - Botón "← Volver" para cerrar el overlay.
+  - Targets táctiles más grandes: `icon-btn` 40×40px, `entry-item` padding 14px, `btn-add` con border-radius 50px, inputs con padding 15px y font-size 16px.
+  - Compatible con iOS y Android. Se puede agregar a la pantalla de inicio como bookmark.
 
 ### 🌐 URL field
 
@@ -106,10 +112,12 @@ silonet/
 ### 🔄 Sincronización Vercel + GitHub Gist
 
 - `checkApi()`: hace `fetch('/api/health')` con timeout de 3 segundos. Si responde OK y tiene `hasToken && hasGistId`, activa `useApi = true`.
-- `syncPull()`: hace GET a `/api/salt?user=X` y `/api/vault?user=X`, guarda los datos en localStorage.
-- `syncPush()`: hace PUT a `/api/salt?user=X` y `/api/vault?user=X` con los datos de localStorage.
+- `syncPull()`: hace GET a `/api/salt?user=X` y `/api/vault?user=X`. Guarda en localStorage solo si los datos contienen salt y vault válidos.
+- `syncPush()`: hace PUT a `/api/salt?user=X` y `/api/vault?user=X` con los datos de localStorage. Verifica la respuesta HTTP y logea errores con `diagMsg()`.
 - `persist()`: siempre guarda en localStorage primero (funciona siempre), luego si `useApi` está activo llama a `syncPush()`.
-- `init()`: al cargar la app, llama a `checkApi()` → si hay API, `syncPull()` para traer los datos más recientes.
+- `init()`: al cargar la app, llama a `checkApi()` → si hay API, `syncPull()` para traer los datos más recientes del usuario actual.
+- Al cambiar de usuario en el selector, se llama a `syncPull()` automáticamente para descargar los datos de ese usuario.
+- `setup()` (creación de vault): después de cifrar y guardar en localStorage, llama a `syncPush()` para subir los datos iniciales al gist inmediatamente.
 
 ### ⏱️ Inactividad
 
@@ -153,6 +161,22 @@ Lee del gist el archivo `{user}-vault.json`. Retorna `{iv: "base64...", data: "b
 
 Recibe `{iv: "base64...", data: "base64..."}` y escribe el archivo `{user}-vault.json` en el gist.
 
+### Nota: body parsing
+
+En el runtime `@vercel/node`, `req` es un `http.IncomingMessage` nativo de Node.js y **no tiene método `.json()`**. Los endpoints PUT usan un helper manual (`getBody()`) que acumula chunks del stream y aplica `JSON.parse`. Reemplazar con `req.json()` causa un error silencioso que rompe la sincronización.
+
+```js
+const getBody = () => new Promise((resolve, reject) => {
+  let chunks = [];
+  req.on('data', c => chunks.push(c));
+  req.on('end', () => {
+    try { resolve(JSON.parse(Buffer.concat(chunks).toString() || '{}')); }
+    catch(e) { reject(e); }
+  });
+  req.on('error', reject);
+});
+```
+
 ---
 
 ## Variables de entorno (Vercel)
@@ -168,13 +192,13 @@ Recibe `{iv: "base64...", data: "base64..."}` y escribe el archivo `{user}-vault
 
 ```
 gist/
-├── 1-vault.json    # Vault cifrado de Silvina
+├── 1-vault.json    # Vault cifrado de Silvina (contiene {iv, data})
 ├── 1-salt.txt      # Salt de Silvina (base64)
 ├── 2-vault.json    # Vault cifrado de Sandro
 └── 2-salt.txt      # Salt de Sandro (base64)
 ```
 
-Los archivos se crean con contenido placeholder. La primera vez que un usuario crea su vault, se reemplazan con datos reales.
+Los archivos de vault se crean inicialmente como `{}` (objeto vacío). Los archivos de salt no existen inicialmente (se crean en el primer `syncPush()`). La app valida que el salt no esté vacío y que el vault tenga `iv` y `data` antes de sobrescribir los datos locales — esto evita que datos placeholder corrompan un vault real.
 
 ---
 
@@ -189,7 +213,7 @@ Los archivos se crean con contenido placeholder. La primera vez que un usuario c
 | `INACTIVITY_MS` | `300000` (5 min) | Timeout de bloqueo por inactividad |
 | `CLIP_MS` | `30000` (30 s) | Tiempo hasta ocultar contraseña mostrada |
 | `API_BASE` | `/api` | Base URL para endpoints de sincronización |
-| `VERSION` | `'1.2.0'` | Versión actual de la app |
+| `VERSION` | `'1.3.0'` | Versión actual de la app |
 
 ---
 
@@ -213,6 +237,7 @@ Los archivos se crean con contenido placeholder. La primera vez que un usuario c
 - No requiere build command ni output directory.
 - El plan gratuito de Vercel tiene límite de 10 segundos de ejecución por función serverless (configurado en `vercel.json` como `maxDuration: 10`).
 - No se necesita Vercel KV ni base de datos externa — todo el almacenamiento es el gist de GitHub.
+- Auto-deploy: al pushear a `main`, Vercel redeploya automáticamente.
 
 ---
 
@@ -220,7 +245,7 @@ Los archivos se crean con contenido placeholder. La primera vez que un usuario c
 
 - **Zero-knowledge**: el servidor nunca ve las contraseñas ni los datos sin cifrar. Todo el cifrado/descifrado ocurre en el navegador con Web Crypto API.
 - **Cifrado**: AES-256-GCM con IV único por operación.
-- **Derivación de clave**: SHA-256 (PBKDF2-like simplificado: hash(password + salt)).
+- **Derivación de clave**: SHA-256 (hash(password + salt)).
 - **Separación de usuarios**: cada usuario tiene su propio salt y vault independientes. Aunque compartan el mismo gist, no pueden descifrar los datos del otro sin la contraseña maestra correspondiente.
 - **Token con mínimo privilegio**: el `GITHUB_TOKEN` solo tiene scope `gist` — no puede leer repos, no puede modificar el perfil, solo leer/escribir gists.
 
@@ -235,6 +260,18 @@ Los archivos se crean con contenido placeholder. La primera vez que un usuario c
 - Funciones de utilidad: `$('id')` para `document.getElementById`, `b64`/`fb64` para base64, `esc` para escape HTML.
 - `diagMsg()` para logging de diagnóstico en un overlay oculto en la pantalla de login.
 - Toast notifications con `toast(msg, type)` donde type puede ser `'success'`, `'error'`, `'info'`.
+
+---
+
+## Bugs conocidos (y fixes)
+
+| Bug | Síntoma | Fix |
+|---|---|---|
+| `req.json()` no existe en Vercel | `syncPush()` fallaba silenciosamente, nada se subía al gist | Reemplazar con `getBody()` manual (stream parser) |
+| `syncPush()` en `setup()` faltaba | Vault recién creado no se subía al gist | Agregar `await syncPush()` al final de `setup()` |
+| `syncPull()` no se llamaba al cambiar de usuario | Teléfono no veía datos del otro usuario | Agregar `await syncPull()` en el `change` handler del selector |
+| Placeholder salt sobrescribía salt real | "Error de cifrado: desconocido" en el teléfono | Validar `if(d.salt)` antes de guardar; eliminar archivos placeholder del gist |
+| `JSON.parse(pkt)` en `syncPush()` | Vault se subía como `"[object Object]"` | Enviar `pkt` (string JSON) directamente, no parseado |
 
 ---
 
