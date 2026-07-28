@@ -1479,6 +1479,13 @@ loginSt.parentNode.insertBefore(diag,loginSt.nextSibling);
 async function init(){
   setUser(currentUser());
   $('user-select').value=currentUser();
+  // Migrar datos viejos (claves_salt/claves_vault) al keyschema nuevo
+  if(currentUser()==='1'&&localStorage.getItem('claves_salt')&&!localStorage.getItem(KEY_SALT)){
+    localStorage.setItem(KEY_SALT,localStorage.getItem('claves_salt'));
+    localStorage.setItem(KEY_VAULT,localStorage.getItem('claves_vault'));
+    localStorage.removeItem('claves_salt');localStorage.removeItem('claves_vault');
+    diagMsg('init: datos migrados de claves_salt a claves_salt_1');
+  }
   if(location.search.includes('reset')){
     var k=[KEY_SALT,KEY_VAULT,KEY_DRAFT];k.forEach(function(x){localStorage.removeItem(x)});
     history.replaceState(null,'',location.pathname);
