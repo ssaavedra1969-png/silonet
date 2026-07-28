@@ -16,6 +16,16 @@ export default async (req, res) => {
     Accept: 'application/vnd.github.v3+json'
   };
 
+  const getBody = () => new Promise((resolve, reject) => {
+    let chunks = [];
+    req.on('data', c => chunks.push(c));
+    req.on('end', () => {
+      try { resolve(JSON.parse(Buffer.concat(chunks).toString() || '{}')); }
+      catch(e) { reject(e); }
+    });
+    req.on('error', reject);
+  });
+
   try {
     if (req.method === 'GET') {
       const resp = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
@@ -27,7 +37,7 @@ export default async (req, res) => {
       const parsed = JSON.parse(raw);
       res.status(200).json(parsed);
     } else if (req.method === 'PUT') {
-      const body = await req.json();
+      const body = await getBody();
       const user = req.query?.user || '1';
       const filename = user + '-vault.json';
       const resp = await fetch(`https://api.github.com/gists/${gistId}`, {
