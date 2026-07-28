@@ -672,6 +672,8 @@ async function setup(pw){
   loadingOverlay.classList.add('hidden');
   scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
   render();resetInact();
+  diagMsg('setup: pushing to API...');
+  await syncPush();
   diagMsg('setup: COMPLETE - app unlocked');
 }
 
