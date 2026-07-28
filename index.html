@@ -1383,9 +1383,10 @@ toggleVis.addEventListener('click',()=>{
   mp.type=is?'text':'password';mpc.type=is?'text':'password';
   toggleVis.textContent='\uD83D\uDC41';
 });
-$('user-select').addEventListener('change',function(){
+$('user-select').addEventListener('change',async function(){
   setUser(this.value);
   mp.value='';mpc.value='';
+  if(useApi)await syncPull();
   checkState();mp.focus();
 });
 
