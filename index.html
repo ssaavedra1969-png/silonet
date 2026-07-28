@@ -566,9 +566,9 @@ async function syncPull(){
   try{
     const u='?user='+currentUser();
     const[saltR,pktR]=await Promise.all([fetch(API_BASE+'/salt'+u),fetch(API_BASE+'/vault'+u)]);
-    if(saltR.ok){const d=await saltR.json();if(d.salt)localStorage.setItem(KEY_SALT,d.salt)}
-    if(pktR.ok){const d=await pktR.json();if(d.iv&&d.data)localStorage.setItem(KEY_VAULT,JSON.stringify(d))}
-  }catch{}
+    if(saltR.ok){const d=await saltR.json();if(d.salt){localStorage.setItem(KEY_SALT,d.salt);diagMsg('syncPull: salt downloaded')}else{diagMsg('syncPull: no salt in gist')}}
+    if(pktR.ok){const d=await pktR.json();if(d.iv&&d.data){localStorage.setItem(KEY_VAULT,JSON.stringify(d));diagMsg('syncPull: vault downloaded')}else{diagMsg('syncPull: no vault in gist')}}
+  }catch(e){diagMsg('syncPull ERROR: '+e.message)}
 }
 
 async function syncPush(){
@@ -577,9 +577,15 @@ async function syncPush(){
     const u='?user='+currentUser();
     const salt=localStorage.getItem(KEY_SALT);
     const pkt=localStorage.getItem(KEY_VAULT);
-    if(salt)await fetch(API_BASE+'/salt'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({salt})});
-    if(pkt)await fetch(API_BASE+'/vault'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:pkt});
-  }catch{}
+    if(salt){
+      const r=await fetch(API_BASE+'/salt'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({salt})});
+      if(!r.ok)diagMsg('syncPush salt FAIL: '+r.status);
+    }
+    if(pkt){
+      const r=await fetch(API_BASE+'/vault'+u,{method:'PUT',headers:{'Content-Type':'application/json'},body:pkt});
+      if(!r.ok)diagMsg('syncPush vault FAIL: '+r.status);
+    }
+  }catch(e){diagMsg('syncPush ERROR: '+e.message)}
 }
 
 // ---- STORAGE ----
