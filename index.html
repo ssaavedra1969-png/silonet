@@ -68,6 +68,10 @@ input,button,textarea{font-family:inherit;font-size:inherit}
 .user-selector label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .user-selector select{width:100%;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-surface);color:var(--text-primary);font-size:13px;outline:none;cursor:pointer}
 .user-selector select:focus{border-color:var(--accent)}
+.user-chip{margin-top:8px;padding:6px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-align:center;display:none}
+.user-chip.visible{display:block}
+.user-chip.silvina{background:var(--accent-subtle);color:var(--accent);border:1px solid var(--accent)}
+.user-chip.sandro{background:var(--green-subtle);color:var(--green);border:1px solid var(--green)}
 .field input{
   width:100%;padding:13px 16px;background:var(--bg-input);border:1px solid var(--border);
   border-radius:var(--radius-sm);color:var(--text-primary);font-size:15px;
@@ -361,6 +365,7 @@ header{
         <option value="1">Silvina</option>
         <option value="2">Sandro</option>
       </select>
+      <div id="user-chip" class="user-chip"></div>
     </div>
     <div class="field">
       <label id="password-label">Contrase&ntilde;a Maestra</label>
@@ -481,6 +486,12 @@ const USER_NAMES={'1':'Silvina','2':'Sandro'};
 function showUserBadge(){
   const el=$('user-badge');
   if(el)el.textContent='\uD83D\uDC64 '+ (USER_NAMES[currentUser()]||'Usuario '+currentUser());
+  const chip=$('user-chip');
+  if(chip){
+    const u=currentUser(),name=USER_NAMES[u]||'Usuario '+u;
+    chip.textContent='\uD83D\uDC64 Ingresando como '+name;
+    chip.className='user-chip visible '+(u==='1'?'silvina':'sandro');
+  }
 }
 function setUser(id){
   localStorage.setItem(KEY_LAST_USER,id);
@@ -635,7 +646,7 @@ async function unlock(pw){
     loadingOverlay.classList.add('hidden');
     scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
     searchIn.value='';S.search='';
-    render();resetInact();showUserBadge();toast('Bienvenid'+ (currentUser()==='1'?'a':'o') +', '+USER_NAMES[currentUser()],'success');diagMsg('unlock: COMPLETE');return true;
+    render();resetInact();showUserBadge();diagMsg('unlock: COMPLETE');return true;
   }catch(e){
     loadingOverlay.classList.add('hidden');
     diagMsg('unlock ERROR: '+(e.message||'desconocido'));
