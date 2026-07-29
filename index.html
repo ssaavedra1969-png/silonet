@@ -441,30 +441,30 @@ header{
 
 // ---- MATRIX RAIN ----
 (function(){
-  var c=document.getElementById('matrix-canvas');
+  const c=document.getElementById('matrix-canvas');
   if(!c)return;
-  var ctx=c.getContext('2d');
-  var W=window.innerWidth,H=window.innerHeight;
+  const ctx=c.getContext('2d');
+  let W=window.innerWidth,H=window.innerHeight;
   c.width=W;c.height=H;
   ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);
-  var cols=Math.floor(W/14);
-  var drops=[];
-  for(var i=0;i<cols;i++)drops[i]=Math.random()*H/14|0;
-  window.addEventListener('resize',function(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);var n=Math.floor(W/14);if(n!==cols){cols=n;drops=[];for(var j=0;j<cols;j++)drops[j]=Math.random()*H/14|0}});
-  var chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ';
-  var t0=Date.now();
+  let cols=Math.floor(W/14);
+  const drops=[];
+  for(let i=0;i<cols;i++)drops[i]=Math.random()*H/14|0;
+  window.addEventListener('resize',()=>{W=c.width=window.innerWidth;H=c.height=window.innerHeight;ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);const n=Math.floor(W/14);if(n!==cols){cols=n;drops.length=0;for(let j=0;j<cols;j++)drops[j]=Math.random()*H/14|0}});
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ';
+  const t0=Date.now();
   function draw(){
-    var locked=S?S.locked:true;
-    var sec=(Date.now()-t0)/1000;
+    const locked=S?S.locked:true;
+    const sec=(Date.now()-t0)/1000;
     ctx.fillStyle='rgba(0,0,0,.035)';
     ctx.fillRect(0,0,W,H);
-    for(var i=0;i<drops.length;i++){
-      var t=chars[Math.floor(Math.random()*chars.length)];
-      var x=i*14+2,y=drops[i]*14;
+    for(let i=0;i<drops.length;i++){
+      const t=chars[Math.floor(Math.random()*chars.length)];
+      const x=i*14+2;const y=drops[i]*14;
       if(locked){
         ctx.fillStyle=y<H?'rgba(0,255,0,.7)':'rgba(180,255,180,1)';
       }else{
-        var h=(i*37+sec*60)%360;
+        const h=(i*37+sec*60)%360;
         ctx.fillStyle='hsla('+h+',95%,65%,'+(y<H?'.55':'.85')+')';
       }
       ctx.font='bold 15px monospace';
@@ -547,7 +547,6 @@ function toast(msg,type){
 }
 
 // ---- CRYPTO ----
-function timeout(ms){return new Promise((_,rej)=>setTimeout(()=>rej(new Error('La operaci&oacute;n criptogr&aacute;fica no respondi&oacute;')),ms))}
 async function deriveKey(pw,salt){
   const enc=new TextEncoder();
   const pwBytes=enc.encode(pw);
@@ -1230,16 +1229,20 @@ function openChPw(){
   });
 }
 
+function downloadJSON(data,filename){
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 // ---- EXPORT / IMPORT ----
 function expVault(){
   const pkt=loadPkt(),salt=localStorage.getItem(KEY_SALT);
   if(!pkt||!salt){toast('No hay vault para exportar','error');return}
-  const data=JSON.stringify({version:1,salt,vault:pkt},null,2);
-  const blob=new Blob([data],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='claves-vault.json';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  URL.revokeObjectURL(url);toast('Vault exportado');
+  downloadJSON(JSON.stringify({version:1,salt,vault:pkt},null,2),'claves-vault.json');
+  toast('Vault exportado');
 }
 
 function impVault(){
@@ -1287,77 +1290,44 @@ function promptImportPw(){
 // ---- EXPORT / IMPORT URLs ----
 function expUrls(){
   if(!S.entries.length){toast('No hay entradas para exportar','error');return}
-  var list=S.entries.map(function(e){return{service:e.service||'',url:e.url||''}});
-  var data=JSON.stringify(list,null,2);
-  var blob=new Blob([data],{type:'application/json'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='claves-urls.json';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  URL.revokeObjectURL(url);toast('Exportadas '+list.length+' URLs');
+  const list=S.entries.map(e=>({service:e.service||'',url:e.url||''}));
+  downloadJSON(JSON.stringify(list,null,2),'claves-urls.json');
+  toast('Exportadas '+list.length+' URLs');
 }
 
 // ---- IMPORT URLs ----
 function impUrls(){
-  var inp=document.createElement('input');
+  const inp=document.createElement('input');
   inp.type='file';inp.accept='.json';
-  inp.addEventListener('change',function(){
-    var f=inp.files[0];if(!f)return;
-    (async function(){
-      try{
-        var txt=await f.text(),list=JSON.parse(txt);
-        if(!Array.isArray(list)){toast('El archivo debe ser un array de entradas','error');return}
-        var count=0;
-        for(var i=0;i<list.length;i++){
-          var item=list[i];
-          if(!item.url||!item.url.trim())continue;
-          S.entries.push({
-            id:uid(),service:item.service||'',username:item.username||'',
-            password:item.password||'',notes:(item.notes||'').trim(),
-            url:item.url.trim(),category:item.category||'General',
-            passwordHistory:[],createdAt:new Date().toISOString(),
-            updatedAt:new Date().toISOString()
-          });
-          if(item.favorite)S.favSet.add(S.entries[S.entries.length-1].id);
-          count++;
-        }
-        if(count===0){toast('No se encontraron URLs v&aacute;lidas','error');return}
-        await persist();
-        render();
-        toast('Importadas '+count+' entradas','success');
-      }catch(e){toast('Error al leer archivo: '+e.message,'error')}
-    })();
+  inp.addEventListener('change',async()=>{
+    const f=inp.files[0];if(!f)return;
+    try{
+      const txt=await f.text();const list=JSON.parse(txt);
+      if(!Array.isArray(list)){toast('El archivo debe ser un array de entradas','error');return}
+      let count=0;
+      for(const item of list){
+        if(!item.url||!item.url.trim())continue;
+        S.entries.push({
+          id:uid(),service:item.service||'',username:item.username||'',
+          password:item.password||'',notes:(item.notes||'').trim(),
+          url:item.url.trim(),category:item.category||'General',
+          passwordHistory:[],createdAt:new Date().toISOString(),
+          updatedAt:new Date().toISOString()
+        });
+        if(item.favorite)S.favSet.add(S.entries[S.entries.length-1].id);
+        count++;
+      }
+      if(count===0){toast('No se encontraron URLs v&aacute;lidas','error');return}
+      await persist();
+      render();
+      toast('Importadas '+count+' entradas','success');
+    }catch(e){toast('Error al leer archivo: '+e.message,'error')}
   });
   inp.click();
 }
 
 // ---- IMPORT FROM LOGIN ----
-function importFromLogin(){
-  var inp=document.createElement('input');
-  inp.type='file';inp.accept='.json';
-  inp.addEventListener('change',function(){
-    var f=inp.files[0];if(!f)return;
-    (async function(){
-      try{
-        var txt=await f.text(),data=JSON.parse(txt);
-        if(!data.salt||!data.vault?.iv||!data.vault?.data){toast('Archivo inv&aacute;lido','error');return}
-        var pw=await promptImportPw();
-        if(!pw)return;
-        var salt=fb64(data.salt),key=await deriveKey(pw,salt);
-        var vault=await dec(data.vault,key);
-        localStorage.setItem(KEY_SALT,data.salt);savePkt(data.vault);
-        S.entries=vault.entries||[];S.key=key;S.salt=salt;S.locked=false;S.selectedId=null;
-        S.favSet=new Set(vault.favorites||[]);
-        scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
-        searchIn.value='';S.search='';render();resetInact();await persist();
-        toast('Vault importado','success');
-      }catch(e){
-        if(e.name==='OperationError')toast('Contrase&ntilde;a incorrecta','error');
-        else toast('Error al importar: '+(e.message||'error'),'error');
-      }
-    })();
-  });
-  inp.click();
-}
+function importFromLogin(){impVault()}
 window.importFromLogin=importFromLogin;
 
 // ---- LOGIN STATE ----
@@ -1503,7 +1473,6 @@ async function testCrypto(){
 const diag=document.createElement('div');
 diag.id='diag';
 diag.style.cssText='background:#1a1a2e;color:#0f0;padding:8px;border-radius:6px;font:11px/1.4 monospace;margin-top:8px;text-align:left;max-height:120px;overflow:auto;white-space:pre-wrap;display:none';
-function diagShow(){diag.style.display='block'}
 function diagMsg(s){
   const t='['+new Date().toLocaleTimeString()+'] '+s;
   console.log(t);
@@ -1524,7 +1493,7 @@ async function init(){
     diagMsg('init: datos migrados de claves_salt a claves_salt_1');
   }
   if(location.search.includes('reset')){
-    var k=[KEY_SALT,KEY_VAULT,KEY_DRAFT];k.forEach(function(x){localStorage.removeItem(x)});
+    const keys=[KEY_SALT,KEY_VAULT,KEY_DRAFT];keys.forEach(x=>localStorage.removeItem(x));
     history.replaceState(null,'',location.pathname);
   }
   diagMsg('init: checkApi');
