@@ -53,25 +53,27 @@ input,button,textarea{font-family:inherit;font-size:inherit}
 .login-card{
   background:var(--bg-secondary);border-radius:var(--radius-lg);padding:48px 40px;
   width:100%;max-width:420px;box-shadow:var(--shadow-lg);text-align:center;
-  border:1px solid var(--border);position:relative;overflow:hidden;
+  border:1px solid var(--border);position:relative;
 }
 .login-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--accent),var(--green),transparent);
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
 }
 .logo-icon{font-size:44px;margin-bottom:4px;display:block}
 .login-card h1{font-size:26px;font-weight:700;letter-spacing:2px;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .subtitle{color:var(--text-muted);margin-bottom:28px;font-size:13px}
 .field{position:relative;margin-bottom:16px;text-align:left}
 .field label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
-.user-selector{margin-bottom:16px;text-align:left}
+.user-selector{margin-bottom:16px;text-align:left;position:relative}
 .user-selector label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .user-selector select{width:100%;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-surface);color:var(--text-primary);font-size:13px;outline:none;cursor:pointer}
 .user-selector select:focus{border-color:var(--accent)}
-.user-chip{margin-top:8px;padding:6px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-align:center;display:none}
+.user-chip{display:none;position:absolute;z-index:10;left:calc(100% + 24px);top:50%;transform:translateY(-50%)}
 .user-chip.visible{display:block}
-.user-chip.silvina{background:var(--accent-subtle);color:var(--accent);border:1px solid var(--accent)}
-.user-chip.sandro{background:var(--green-subtle);color:var(--green);border:1px solid var(--green)}
+.user-chip::before{content:'';position:absolute;top:50%;right:100%;margin-top:-12px;border:12px solid transparent;border-right-color:rgba(255,255,255,.6)}
+.user-chip img{width:120px;height:120px;border-radius:50%;object-fit:cover;display:block;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.user-chip.silvina{}.user-chip.sandro{}
 .field input{
   width:100%;padding:13px 16px;background:var(--bg-input);border:1px solid var(--border);
   border-radius:var(--radius-sm);color:var(--text-primary);font-size:15px;
@@ -355,6 +357,9 @@ header{
   .sec-avatar{width:36px;height:36px}
   .user-badge{font-size:0;gap:4px}
   .user-badge img{width:48px;height:48px;border-width:2px}
+  .user-chip{position:static;transform:none;left:auto;top:auto;margin-top:10px}
+  .user-chip::before{display:none}
+  .user-chip img{width:80px;height:80px}
   .header-right{gap:2px}
   .brand-foot{font-size:9px;margin-top:16px}
 }
@@ -386,6 +391,7 @@ header{
     <div class="user-selector">
       <label>Usuario</label>
       <select id="user-select">
+        <option value="">Seleccionar usuario</option>
         <option value="1">Silvina</option>
         <option value="2">Sandro</option>
       </select>
@@ -475,11 +481,11 @@ header{
   let W=window.innerWidth,H=window.innerHeight;
   c.width=W;c.height=H;
   ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);
-  let cols=Math.floor(W/14);
+  let cols=Math.floor(W/18);
   const drops=[];
-  for(let i=0;i<cols;i++)drops[i]=Math.random()*H/14|0;
-  window.addEventListener('resize',()=>{W=c.width=window.innerWidth;H=c.height=window.innerHeight;ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);const n=Math.floor(W/14);if(n!==cols){cols=n;drops.length=0;for(let j=0;j<cols;j++)drops[j]=Math.random()*H/14|0}});
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ';
+  for(let i=0;i<cols;i++)drops[i]=Math.random()*H/18|0;
+  window.addEventListener('resize',()=>{W=c.width=window.innerWidth;H=c.height=window.innerHeight;ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);const n=Math.floor(W/18);if(n!==cols){cols=n;drops.length=0;for(let j=0;j<cols;j++)drops[j]=Math.random()*H/18|0}});
+  const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const t0=Date.now();
   function draw(){
     const locked=S?S.locked:true;
@@ -488,15 +494,17 @@ header{
     ctx.fillRect(0,0,W,H);
     for(let i=0;i<drops.length;i++){
       const t=chars[Math.floor(Math.random()*chars.length)];
-      const x=i*14+2;const y=drops[i]*14;
+      const x=i*18+2;const y=drops[i]*18;
       if(locked){
-        ctx.fillStyle=y<H?'rgba(0,255,0,.7)':'rgba(180,255,180,1)';
+        ctx.fillStyle=y<H?'rgba(0,255,100,1)':'rgba(220,255,220,1)';
       }else{
         const h=(i*37+sec*60)%360;
-        ctx.fillStyle='hsla('+h+',95%,65%,'+(y<H?'.55':'.85')+')';
+        ctx.fillStyle='hsla('+h+',95%,75%,'+(y<H?'.7':'.95')+')';
       }
-      ctx.font='bold 15px monospace';
+      ctx.font='bold 19px monospace';
+      ctx.shadowColor='rgba(0,255,0,.3)';ctx.shadowBlur=6;
       ctx.fillText(t,x,y);
+      ctx.shadowBlur=0;
       if(y>H+20)drops[i]=0;
       drops[i]++;
     }
@@ -509,26 +517,30 @@ let KEY_SALT = 'claves_salt_1';
 let KEY_VAULT = 'claves_vault_1';
 const KEY_DRAFT = 'claves_draft';
 const KEY_LAST_USER = 'claves_last_user';
-function currentUser(){return localStorage.getItem(KEY_LAST_USER)||'1'}
+function currentUser(){return localStorage.getItem(KEY_LAST_USER)||''}
 const USER_NAMES={'1':'Silvina','2':'Sandro'};
 const USER_PHONES={'1':'5491138674644','2':'5491141751031'};
 function showUserBadge(){
   const el=$('user-badge');
   if(el){
-    const u=currentUser(),name=USER_NAMES[u]||'Usuario '+u;
-    el.innerHTML='<img src="usuarios/'+name+'.png" alt=""> <span>'+name+'</span>';
+    const u=currentUser(),name=USER_NAMES[u]||'';
+    el.innerHTML=name?'<img src="usuarios/'+name+'.png" alt=""> <span>'+name+'</span>':'';
   }
   const chip=$('user-chip');
   if(chip){
-    const u=currentUser(),name=USER_NAMES[u]||'Usuario '+u;
-    chip.textContent='\uD83D\uDC64 Ingresando como '+name;
-    chip.className='user-chip visible '+(u==='1'?'silvina':'sandro');
+    const u=currentUser(),name=USER_NAMES[u];
+    if(u&&name){
+      chip.innerHTML='<img src="usuarios/'+name+'.png" alt="">';
+      chip.className='user-chip visible';
+    }else{
+      chip.className='user-chip';
+    }
   }
 }
 function setUser(id){
   localStorage.setItem(KEY_LAST_USER,id);
-  KEY_SALT='claves_salt_'+id;
-  KEY_VAULT='claves_vault_'+id;
+  KEY_SALT=id?'claves_salt_'+id:'claves_salt_1';
+  KEY_VAULT=id?'claves_vault_'+id:'claves_vault_1';
   showUserBadge();
 }
 const INACTIVITY_MS = 5*60*1000;
@@ -1393,7 +1405,9 @@ function checkState(){
 }
 
 function validateLogin(){
+  const sel=$('user-select').value;
   const pw=mp.value;
+  if(!sel){loginBtn.disabled=true;return}
   if(S.isSetup){
     const cfv=mpc.value;
     loginBtn.disabled=!(pw.length>=4&&pw===cfv);
@@ -1412,6 +1426,8 @@ function updateStrength(pw){
 }
 
 // ---- EVENTS ----
+localStorage.removeItem(KEY_LAST_USER);
+$('user-select').value='';
 mp.addEventListener('input',validateLogin);
 mpc.addEventListener('input',validateLogin);
 mp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!loginBtn.disabled)loginBtn.click()});
@@ -1422,14 +1438,22 @@ toggleVis.addEventListener('click',()=>{
   toggleVis.textContent='\uD83D\uDC41';
 });
 $('user-select').addEventListener('change',async function(){
+  if(!this.value){setUser('');mp.value='';mpc.value='';checkState();validateLogin();mp.focus();return}
   setUser(this.value);
   mp.value='';mpc.value='';
   if(useApi)await syncPull();
-  checkState();mp.focus();
+  checkState();validateLogin();mp.focus();
 });
 showUserBadge();
 
 loginBtn.addEventListener('click',async()=>{
+  const sel=$('user-select');
+  if(!sel.value){
+    loginErr.innerHTML='<b>Falta colocar el usuario</b>';
+    loginErr.classList.remove('hidden');
+    sel.focus();
+    return
+  }
   const pw=mp.value;
   diagMsg('click: pw length='+pw.length+', isSetup='+S.isSetup);
   loginErr.classList.add('hidden');
