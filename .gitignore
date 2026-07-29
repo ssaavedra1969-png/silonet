@@ -1,4 +1,4 @@
 *.zip
 GITHUB/
-claves-vault.json
+claves-vault*.json
 claves-urls.json

@@ -60,7 +60,7 @@ silonet/
 
 - `enc(plain, key)`: AES-256-GCM con IV aleatorio de 12 bytes. Retorna `{iv: base64, data: base64}`.
 - `dec(pkt, key)`: recibe `{iv, data}`, descifra y parsea JSON.
-- `reencrypt(oldKey, newKey)`: descifra el vault con la clave vieja y lo vuelve a cifrar con la nueva (al cambiar la contraseña maestra).
+- `changePw(oldPw, newPw)`: descifra el vault con la clave vieja, genera nuevo salt, y lo vuelve a cifrar con la nueva contraseña maestra.
 
 ### 📋 CRUD de entradas
 
