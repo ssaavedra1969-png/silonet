@@ -1240,7 +1240,7 @@ function impVault(){
       S.entries=vault.entries||[];S.key=key;S.salt=salt;S.locked=false;S.selectedId=null;
       S.favSet=new Set(vault.favorites||[]);
       scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
-      searchIn.value='';S.search='';render();resetInact();
+      searchIn.value='';S.search='';render();resetInact();await persist();
       toast('Vault importado','success');
     }catch(e){
       if(e.name==='OperationError')toast('Contrase&ntilde;a incorrecta','error');
@@ -1330,7 +1330,7 @@ function importFromLogin(){
         S.entries=vault.entries||[];S.key=key;S.salt=salt;S.locked=false;S.selectedId=null;
         S.favSet=new Set(vault.favorites||[]);
         scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
-        searchIn.value='';S.search='';render();resetInact();
+        searchIn.value='';S.search='';render();resetInact();await persist();
         toast('Vault importado','success');
       }catch(e){
         if(e.name==='OperationError')toast('Contrase&ntilde;a incorrecta','error');
