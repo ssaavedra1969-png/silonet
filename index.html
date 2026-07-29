@@ -7,27 +7,27 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg-deep:#0a0806;
-  --bg-primary:#100e0a;
-  --bg-secondary:#181510;
-  --bg-card:#201d16;
-  --bg-card-hover:#28241c;
-  --bg-input:#0c0a06;
-  --bg-surface:#262218;
-  --text-primary:#e8e4dc;
-  --text-secondary:#9a9488;
-  --text-muted:#6a6458;
-  --accent:#38bdf8;
-  --accent-hover:#0ea5e9;
-  --accent-subtle:rgba(56,189,248,0.12);
-  --green:#39ff14;
-  --green-hover:#00e600;
-  --green-subtle:rgba(57,255,20,0.12);
-  --border:#282418;
-  --border-light:#383428;
-  --success:#39ff14;
-  --warning:#fbbf24;
-  --danger:#ef4444;
+  --bg-deep:#12110c;
+  --bg-primary:#1a1812;
+  --bg-secondary:#222018;
+  --bg-card:#2a2820;
+  --bg-card-hover:#323028;
+  --bg-input:#0e0d08;
+  --bg-surface:#2e2c22;
+  --text-primary:#e8e6de;
+  --text-secondary:#a09a8c;
+  --text-muted:#726a5c;
+  --accent:#5b9eff;
+  --accent-hover:#4a8df0;
+  --accent-subtle:rgba(91,158,255,0.12);
+  --green:#4ad0a0;
+  --green-hover:#3ac090;
+  --green-subtle:rgba(74,208,160,0.12);
+  --border:#2e2a20;
+  --border-light:#3e3a30;
+  --success:#4ad0a0;
+  --warning:#f0b830;
+  --danger:#e86050;
   --font:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --font-mono:'SF Mono','Cascadia Code','Consolas',monospace;
   --radius-sm:6px;
@@ -46,8 +46,8 @@ input,button,textarea{font-family:inherit;font-size:inherit}
 #screen-login{
   display:flex;align-items:center;justify-content:center;min-height:100vh;
   padding:24px;background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(56,189,248,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 30% 60%, rgba(57,255,20,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(91,158,255,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 60%, rgba(74,208,160,0.05) 0%, transparent 60%),
     rgba(10,10,15,0.55);
 }
 .login-card{
@@ -88,7 +88,7 @@ input,button,textarea{font-family:inherit;font-size:inherit}
   transition:background .2s,transform .1s,box-shadow .2s;margin-top:4px;
   position:relative;display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.btn-primary:hover{background:var(--accent-hover);box-shadow:0 0 24px rgba(56,189,248,0.25)}
+.btn-primary:hover{background:var(--accent-hover);box-shadow:0 0 24px rgba(91,158,255,0.2)}
 .btn-primary:active{transform:scale(.98)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none;transform:none}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none}
@@ -113,7 +113,9 @@ header{
 }
 .app-title{font-weight:700;font-size:17px;letter-spacing:.8px;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .app-title .badge{font-size:9px;background:var(--green-subtle);color:var(--green);padding:2px 6px;border-radius:4px;font-weight:600;letter-spacing:.5px}
-.app-title .user-badge{font-size:11px;color:var(--text-secondary);padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-weight:500;white-space:nowrap}
+.user-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-secondary)}
+.user-badge img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--border-light);transition:border-color .2s}
+.user-badge:hover img{border-color:var(--accent)}
 .search-wrap{flex:1;max-width:360px;margin:0 auto;position:relative}
 .search-wrap input{
   width:100%;padding:9px 14px 9px 36px;background:var(--bg-input);border:1px solid var(--border);
@@ -217,20 +219,29 @@ header{
 .detail-head-actions .btn-del:hover{background:rgba(239,68,68,.1);border-color:var(--danger)}
 .detail-field{margin-bottom:18px}
 .detail-field>label{display:block;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:5px}
-.detail-row{display:flex;align-items:center;gap:8px;min-height:32px}
-.detail-row .val{word-break:break-all;font-size:14px}
-.detail-row .val-mono{font-family:var(--font-mono);font-size:13px}
-.copy-btn{
-  background:none;border:none;color:var(--accent);cursor:pointer;font-size:15px;padding:4px 6px;
-  border-radius:4px;transition:all .2s;flex-shrink:0;line-height:1;
-}
-.copy-btn:hover{background:var(--accent-subtle);color:var(--accent-hover)}
-.detail-notes{
-  background:var(--bg-input);padding:14px 16px;border-radius:var(--radius-sm);
-  font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;
-  min-height:48px;border:1px solid var(--border);
-}
+.sec-box{margin-bottom:12px;background:color-mix(in srgb,var(--sec) 6%,transparent);border:1px solid color-mix(in srgb,var(--sec) 20%,transparent);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s}
+.sec-box:hover{border-color:color-mix(in srgb,var(--sec) 40%,transparent)}
+.sec-hd{display:flex;align-items:center;gap:7px;margin-bottom:2px}
+.sec-ico{width:18px;height:18px;flex-shrink:0}
+.sec-tit{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--sec)}
+.sec-bd{display:flex;flex-direction:column;gap:6px}
+.sec-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sec-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;min-width:52px}
+.sec-val{font-size:13px;color:var(--text-primary)}
+.sec-mono{font-family:var(--font-mono);letter-spacing:.3px}
+.sec-val-wrap{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+.sec-cp{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:4px;font-size:12px;color:var(--text-muted);transition:all .15s;line-height:1}
+.sec-cp:hover{background:color-mix(in srgb,var(--sec) 15%,transparent);color:var(--sec)}
+.sec-notes{font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;padding:2px 0}
+.sec-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.sec-btn:hover{filter:brightness(1.1);box-shadow:0 0 16px color-mix(in srgb,var(--sec) 40%,transparent)}
+.sec-user{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);margin-left:auto;flex-shrink:0}
+.sec-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;border:2px solid color-mix(in srgb,var(--sec) 30%,transparent)}
 .detail-meta{font-size:11px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7}
+.brand-tag{display:none;font-size:10px;font-weight:600;color:var(--text-muted);margin-left:10px;letter-spacing:.3px;vertical-align:middle}
+@media(min-width:821px){.brand-tag{display:inline}}
+.brand-foot{text-align:center;margin-top:20px;font-size:10px;color:var(--text-muted);letter-spacing:.5px;opacity:.6}
+.brand-sub{font-size:10px;color:var(--text-muted);letter-spacing:.3px;opacity:.5;margin-top:12px}
 
 /* MODAL */
 .modal-scrim{
@@ -386,22 +397,25 @@ header{
       <button onclick="importFromLogin()" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline">Importar vault desde archivo</button>
       <button onclick="localStorage.clear();location.reload()" style="background:none;border:none;color:var(--text-muted);font-size:11px;cursor:pointer;text-decoration:underline">Limpiar vault y empezar de nuevo</button>
     </div>
+    <div class="brand-foot">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</div>
     <div id="loading-overlay" class="loading-overlay hidden"><div class="spinner-lg"></div><div class="loading-text" id="loading-text">Derivando clave de cifrado&hellip;</div></div>
   </div>
 </div>
 
 <div id="screen-app" class="hidden">
   <header>
-    <div class="app-title">&#x1F510; SILONET <span class="badge" id="entry-badge">0</span> <span class="user-badge" id="user-badge"></span></div>
+    <div class="app-title">&#x1F510; SILONET <span class="badge" id="entry-badge">0</span><span class="brand-tag">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</span></div>
     <div class="search-wrap">
       <span class="search-icon">&#x1F50D;</span>
       <input type="search" id="search-input" placeholder="Buscar servicios o usuarios..." autocomplete="off">
     </div>
     <div class="header-right">
+      <span class="user-badge" id="user-badge"></span>
       <span class="timer-text" id="timer-text">&nbsp;</span>
       <button class="icon-btn" id="btn-backup" title="Guardar backup en archivo">&#x1F4BE;</button>
       <button class="icon-btn" id="btn-lock" title="Bloquear vault (Ctrl+L)">&#x1F512;</button>
       <button class="icon-btn" id="btn-settings" title="Configuraci&oacute;n">&#x2699;&#xFE0F;</button>
+      <button class="icon-btn" id="btn-logout" title="Salir / Cambiar usuario">&#x1F6AA;</button>
     </div>
   </header>
   <div class="app-body">
@@ -426,6 +440,7 @@ header{
       <div class="empty-state" id="empty-state">
         <span class="empty-icon">&#x1F50D;</span>
         <span id="empty-text">Seleccione una entrada</span>
+        <span class="brand-sub">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</span>
       </div>
       <div id="entry-detail" class="hidden"></div>
     </div>
@@ -483,9 +498,14 @@ const KEY_DRAFT = 'claves_draft';
 const KEY_LAST_USER = 'claves_last_user';
 function currentUser(){return localStorage.getItem(KEY_LAST_USER)||'1'}
 const USER_NAMES={'1':'Silvina','2':'Sandro'};
+const USER_PHONES={'1':'5491138674644','2':'5491141751031'};
 function showUserBadge(){
   const el=$('user-badge');
-  if(el)el.textContent='\uD83D\uDC64 '+ (USER_NAMES[currentUser()]||'Usuario '+currentUser());
+  if(el){
+    const u=currentUser(),name=USER_NAMES[u]||'Usuario '+u;
+    const img='usuarios/'+name+'.png';
+    el.innerHTML='<img src="'+img+'" alt="" loading="lazy"> '+name;
+  }
   const chip=$('user-chip');
   if(chip){
     const u=currentUser(),name=USER_NAMES[u]||'Usuario '+u;
@@ -961,25 +981,30 @@ function renderDetail(entry){
   if(h.reused)html+='<span style="font-size:11px;color:var(--warning)">&#x26A0;&#xFE0F; Usada en '+reusedWarn.length+' entrada'+(reusedWarn.length>1?'s':'')+' m&aacute;s</span>';
   html+='</div>';
 
-  if(entry.category&&entry.category!=='General'){
-    const cc=CAT_COLORS[hashStr(entry.category)%CAT_COLORS.length];
-    html+='<div class="detail-field"><label>Categor&iacute;a</label><span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:'+cc+'20;color:'+cc+';border-radius:4px;font-size:11px;font-weight:600;border:1px solid '+cc+'40">'+esc(entry.category)+'</span></div>';
-  }
-  if(entry.url){
-    html+='<div class="detail-field"><label>Sitio web</label><div class="detail-row"><span class="val">'
-    +'<a href="'+esc(entry.url)+'" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:13px">'+esc(entry.url)+'</a></span>'
-    +'<button class="copy-btn copy-url" data-val="'+esc(entry.url)+'" title="Copiar URL">&#x1F4CB;</button></div></div>';
-  }
+  // site section
+  const cc=entry.category&&entry.category!=='General'?CAT_COLORS[hashStr(entry.category)%CAT_COLORS.length]:null;
+  html+='<div class="sec-box" style="--sec:#5b9eff"><div class="sec-hd"><svg class="sec-ico" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="var(--sec)"/></svg><span class="sec-tit">Sitio web</span></div><div class="sec-bd">'
+  +(entry.category&&entry.category!=='General'?
+    '<div class="sec-row"><span class="sec-lbl">Categoría</span><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:'+cc+'20;color:'+cc+';border-radius:4px;font-size:10px;font-weight:600;border:1px solid '+cc+'40">'+esc(entry.category)+'</span></div>':'')
+  +(entry.url?
+    '<div class="sec-row"><span class="sec-lbl">URL</span><div class="sec-val-wrap"><a href="'+esc(entry.url)+'" target="_blank" rel="noopener" style="color:var(--sec);text-decoration:none;font-size:13px">'+esc(entry.url)+'</a><button class="sec-cp" data-val="'+esc(entry.url)+'" title="Copiar URL">📋</button></div></div>':'')
+  +'</div></div>';
 
-  html+='<div class="detail-field"><label>Usuario</label><div class="detail-row"><span class="val">'+esc(entry.username||'')+'</span><button class="copy-btn copy-user" data-val="'+esc(entry.username||'')+'" title="Copiar usuario">&#x1F4CB;</button></div></div>';
+  // access section
+  html+='<div class="sec-box" style="--sec:#f0b830"><div class="sec-hd"><svg class="sec-ico" viewBox="0 0 24 24" fill="none"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="var(--sec)"/></svg><span class="sec-tit">Acceso</span></div><div class="sec-bd">'
+  +'<div class="sec-row"><span class="sec-lbl">Usuario</span><div class="sec-val-wrap"><span class="sec-val">'+esc(entry.username||'')+'</span><button class="sec-cp" data-val="'+esc(entry.username||'')+'" title="Copiar usuario">📋</button></div></div>'
+  +'<div class="sec-row"><span class="sec-lbl">Clave</span><div class="sec-val-wrap"><span class="sec-val sec-mono" id="pdisp-'+entry.id+'">'+masked+'</span><button class="sec-cp toggle-pwd" data-id="'+entry.id+'" title="Mostrar">👁</button><button class="sec-cp" data-val="'+esc(entry.password||'')+'" title="Copiar clave">📋</button></div></div>'
+  +'</div></div>';
 
-  html+='<div class="detail-field"><label>Contrase&ntilde;a</label><div class="detail-row"><span class="val val-mono password-display" id="pdisp-'+entry.id+'">'+masked+'</span>';
-  html+='<button class="copy-btn toggle-pwd" data-id="'+entry.id+'" title="Mostrar">&#x1F441;</button>';
-  html+='<button class="copy-btn copy-pwd" data-val="'+esc(entry.password||'')+'" title="Copiar">&#x1F4CB;</button></div></div>';
-
+  // notes section
   if(entry.notes){
-    html+='<div class="detail-field"><label>Notas</label><div class="detail-notes">'+esc(entry.notes||'')+'</div></div>';
+    html+='<div class="sec-box" style="--sec:#8c8a82"><div class="sec-hd"><svg class="sec-ico" viewBox="0 0 24 24" fill="none"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z" fill="var(--sec)"/></svg><span class="sec-tit">Notas</span></div><div class="sec-bd"><div class="sec-notes">'+esc(entry.notes)+'</div></div></div>';
   }
+
+  const phone=USER_PHONES[currentUser()],phoneLabel='+'+phone.slice(0,2)+' '+phone.slice(2,3)+' '+phone.slice(3,5)+' '+phone.slice(5,9)+'-'+phone.slice(9);
+  html+='<div class="sec-box" style="--sec:#25d366"><div class="sec-hd"><svg class="sec-ico" viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-1.102-.984-1.847-2.199-2.062-2.57-.216-.371-.023-.572.163-.757.166-.166.373-.434.56-.65.187-.217.249-.372.373-.62.125-.248.062-.465-.031-.65-.094-.185-.67-1.614-.92-2.21-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="var(--sec)"/></svg><span class="sec-tit">WhatsApp</span></div><div class="sec-bd">'
+  +'<div class="sec-row"><span class="sec-lbl">Enviar a</span><span class="sec-val" style="font-family:var(--font-mono);font-size:14px">'+phoneLabel+'</span><span class="sec-user"><img class="sec-avatar" src="usuarios/'+esc(USER_NAMES[currentUser()])+'.png" alt="" loading="lazy">'+esc(USER_NAMES[currentUser()])+'</span></div>'
+  +'<button class="sec-btn" data-id="'+entry.id+'" style="background:var(--sec);color:#fff;margin-top:8px">📤 Enviar clave</button></div></div>';
 
   const hist=(entry.passwordHistory||[]).filter(h=>h.password);
   if(hist.length>0){
@@ -1023,11 +1048,17 @@ function renderDetail(entry){
 
   eDetail.querySelector('.btn-edit')?.addEventListener('click',()=>openEntryModal(entry));
   eDetail.querySelector('.btn-del')?.addEventListener('click',()=>confirmDel(entry));
-  eDetail.querySelector('.copy-user')?.addEventListener('click',()=>copy(entry.username));
-  eDetail.querySelector('.copy-pwd')?.addEventListener('click',()=>copy(entry.password));
-  eDetail.querySelector('.copy-url')?.addEventListener('click',()=>copy(entry.url));
+  eDetail.querySelectorAll('.sec-cp').forEach(b=>b.addEventListener('click',()=>copy(b.dataset.val)));
   eDetail.querySelector('.toggle-pwd')?.addEventListener('click',()=>togglePwd(entry));
   eDetail.querySelector('.entry-star-detail')?.addEventListener('click',()=>{toggleFav(entry.id);renderDetail(S.entries.find(e=>e.id===entry.id))});
+  eDetail.querySelector('.sec-btn')?.addEventListener('click',()=>sendWsp(entry));
+}
+
+function sendWsp(entry){
+  const phone=USER_PHONES[currentUser()];
+  if(!phone)return;
+  const msg='*'+entry.service+'*%0AUsuario: '+encodeURIComponent(entry.username||'')+'%0AClave: '+encodeURIComponent(entry.password);
+  window.open('https://wa.me/'+phone+'?text='+msg,'_blank');
 }
 
 function togglePwd(entry){
@@ -1197,7 +1228,8 @@ function openSettings(){
     '<span style="color:var(--accent)">'+hc.medium+' medias</span> &middot; '+
     '<span style="color:var(--danger)">'+hc.weak+' d&eacute;biles</span></div></div>'+
     '<div class="settings-section"><h3>Acerca de</h3>'+
-    '<div class="about-box"><strong>SILONET</strong> v'+VERSION+'<br>'+
+    '<div class="about-box"><strong>&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</strong><br><br>'+
+    '<strong>SILONET</strong> v'+VERSION+'<br>'+
     'Cifrado: AES-256-GCM &middot; SHA-256<br>'+
     'Todo el almacenamiento es local en este navegador.<br>'+
     'No se env&iacute;an datos a internet.</div></div>'+
@@ -1417,6 +1449,7 @@ lockBtn.addEventListener('click',lock);
 addBtn.addEventListener('click',()=>openEntryModal(null));
 setBtn.addEventListener('click',openSettings);
 document.getElementById('btn-backup')?.addEventListener('click',expVault);
+document.getElementById('btn-logout')?.addEventListener('click',lock);
 backBtn.addEventListener('click',()=>{pDetail.classList.remove('open')});
 
 searchIn.addEventListener('input',()=>{
@@ -1483,6 +1516,7 @@ loginSt.parentNode.insertBefore(diag,loginSt.nextSibling);
 
 // ---- INIT ----
 async function init(){
+  console.log('\uD83C\uDF31 SANSOFT Engine \u26A1 Powered by clean code');
   setUser(currentUser());
   $('user-select').value=currentUser();
   // Migrar datos viejos (claves_salt/claves_vault) al keyschema nuevo
