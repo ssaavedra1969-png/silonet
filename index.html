@@ -114,7 +114,7 @@ header{
 .app-title{font-weight:700;font-size:17px;letter-spacing:.8px;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .app-title .badge{font-size:9px;background:var(--green-subtle);color:var(--green);padding:2px 6px;border-radius:4px;font-weight:600;letter-spacing:.5px}
 .user-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-secondary)}
-.user-badge img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--border-light);flex-shrink:0;display:block}
+.user-badge img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border-light);flex-shrink:0;display:block}
 .user-badge:hover img{border-color:var(--accent)}
 .user-badge span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .search-wrap{flex:1;max-width:360px;margin:0 auto;position:relative}
@@ -207,8 +207,9 @@ header{
   border:1px solid var(--border);max-width:600px;animation:fadeIn .2s ease;
 }
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:24px}
+.detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
 .detail-srv{font-size:22px;font-weight:700;word-break:break-word}
+.detail-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border-light);flex-shrink:0}
 .detail-head-actions{display:flex;gap:6px;flex-shrink:0}
 .detail-head-actions button{
   padding:7px 14px;border:1px solid var(--border);background:var(--bg-surface);
@@ -228,16 +229,16 @@ header{
 .sec-bd{display:flex;flex-direction:column;gap:6px}
 .sec-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .sec-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;min-width:52px}
-.sec-val{font-size:13px;color:var(--text-primary)}
+.sec-val{font-size:13px;color:var(--text-primary);word-break:break-all}
 .sec-mono{font-family:var(--font-mono);letter-spacing:.3px}
 .sec-val-wrap{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
 .sec-cp{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:4px;font-size:12px;color:var(--text-muted);transition:all .15s;line-height:1}
 .sec-cp:hover{background:color-mix(in srgb,var(--sec) 15%,transparent);color:var(--sec)}
-.sec-notes{font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;padding:2px 0}
+.sec-notes{font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;word-break:break-word;padding:2px 0}
 .sec-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .sec-btn:hover{filter:brightness(1.1);box-shadow:0 0 16px color-mix(in srgb,var(--sec) 40%,transparent)}
 .sec-user{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);margin-left:auto;flex-shrink:0}
-.sec-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;border:2px solid color-mix(in srgb,var(--sec) 30%,transparent)}
+.sec-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:3px solid color-mix(in srgb,var(--sec) 30%,transparent)}
 .detail-meta{font-size:11px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7}
 .brand-tag{display:none;font-size:10px;font-weight:600;color:var(--text-primary);margin-left:10px;letter-spacing:.3px;vertical-align:middle;opacity:.85}
 @media(min-width:821px){.brand-tag{display:inline}}
@@ -345,14 +346,15 @@ header{
   .list-sort{font-size:13px;padding:6px 10px}
   .login-card .field .toggle-vis{bottom:12px;font-size:18px;padding:6px}
   .detail-head{flex-direction:column;gap:8px;margin-bottom:16px}
+  .detail-avatar{width:48px;height:48px}
   .detail-head-actions{width:100%}
   .detail-head-actions button{flex:1;justify-content:center;padding:10px 12px;font-size:12px}
   .sec-box{padding:12px}
   .sec-lbl{min-width:44px;font-size:9px}
   .sec-val{font-size:12px}
-  .sec-avatar{width:20px;height:20px}
+  .sec-avatar{width:36px;height:36px}
   .user-badge{font-size:0;gap:4px}
-  .user-badge img{width:26px;height:26px;border-width:1.5px}
+  .user-badge img{width:48px;height:48px;border-width:2px}
   .header-right{gap:2px}
   .brand-foot{font-size:9px;margin-top:16px}
 }
@@ -980,7 +982,7 @@ function renderDetail(entry){
   const fav=S.favSet.has(entry.id)?'&#x2B50;':'&#x2606;';
   const reusedWarn=S.entries.filter(e=>e.password===entry.password&&e.id!==entry.id);
   let html='<div class="detail-card">';
-  html+='<div class="detail-head"><div class="detail-srv">'+esc(entry.service||'')+'</div><div class="detail-head-actions">';
+  html+='<div class="detail-head"><div class="detail-srv">'+esc(entry.service||'')+'</div><img class="detail-avatar" src="usuarios/'+esc(USER_NAMES[currentUser()])+'.png" alt="" loading="lazy"><div class="detail-head-actions">';
   html+='<button class="btn-edit" data-id="'+entry.id+'">&#x270F;&#xFE0F; Editar</button>';
   html+='<button class="btn-del" data-id="'+entry.id+'">&#x1F5D1; Eliminar</button></div></div>';
 
