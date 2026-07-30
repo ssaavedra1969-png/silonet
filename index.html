@@ -51,48 +51,61 @@ input,button,textarea{font-family:inherit;font-size:inherit}
     rgba(10,10,15,0.55);
 }
 .login-card{
-  background:var(--bg-secondary);border-radius:var(--radius-lg);padding:48px 40px;
-  width:100%;max-width:420px;box-shadow:var(--shadow-lg);text-align:center;
-  border:1px solid var(--border);position:relative;
+  background:rgba(0,0,0,0.05);border-radius:24px;padding:0;
+  width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;
+  border:1px solid rgba(255,255,255,.06);position:relative;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;flex-direction:column;gap:3px;
 }
 .login-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--accent),var(--green),transparent);
-  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius:24px 24px 0 0;
 }
-.logo-icon{font-size:44px;margin-bottom:4px;display:block}
-.login-card h1{font-size:26px;font-weight:700;letter-spacing:2px;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.subtitle{color:var(--text-muted);margin-bottom:28px;font-size:13px}
+.login-head{padding:44px 40px 24px;position:relative;border-radius:20px 20px 14px 14px;border:1px solid rgba(255,255,255,.06)}
+.login-head::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent),var(--green),transparent);border-radius:1px}
+.login-body{padding:24px 40px;position:relative;border-radius:14px;border:1px solid rgba(255,255,255,.06)}
+.login-body::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent),var(--green),transparent);border-radius:1px}
+.login-foot{padding:16px 40px;font-size:10px;color:rgba(255,255,255,.7);letter-spacing:.5px;border-radius:14px 14px 20px 20px;border:1px solid rgba(255,255,255,.06)}
+.login-links{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.link-btn{background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 0}
+.link-btn.muted{color:rgba(255,255,255,.3)}
+.logo-icon{font-size:48px;display:inline-block;text-shadow:0 2px 12px rgba(91,158,255,.5),0 -1px 4px rgba(91,158,255,.2),0 4px 20px rgba(0,0,0,.4);animation:logo3d 4s ease-in-out infinite;transform-style:preserve-3d;perspective:300px;cursor:default;transition:filter .3s;position:relative;z-index:1;line-height:1;vertical-align:middle}
+.logo-icon:hover{filter:brightness(1.3);animation-duration:2s}
+@keyframes logo3d{0%,100%{transform:translateY(0) rotateY(0deg) scale(1)}20%{transform:translateY(-5px) rotateY(-10deg) scale(1.05)}40%{transform:translateY(-2px) rotateY(5deg) scale(1.02)}60%{transform:translateY(-5px) rotateY(-5deg) scale(1.05)}80%{transform:translateY(-1px) rotateY(10deg) scale(1.02)}}
+.logo-glow{position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(91,158,255,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulseGlow 3s ease-in-out infinite;pointer-events:none}
+@keyframes pulseGlow{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}
+.subtitle{color:#fff;margin-bottom:24px;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:300;text-shadow:0 1px 2px rgba(0,0,0,.6),0 0 20px rgba(91,158,255,.25),0 0 40px rgba(91,158,255,.1)}
 .field{position:relative;margin-bottom:16px;text-align:left}
-.field label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.field label{display:block;font-size:11px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600;text-transform:none;letter-spacing:0}
 .user-selector{margin-bottom:16px;text-align:left;position:relative}
-.user-selector label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
-.user-selector select{width:100%;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-surface);color:var(--text-primary);font-size:13px;outline:none;cursor:pointer}
-.user-selector select:focus{border-color:var(--accent)}
+.user-selector label{display:block;font-size:11px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600;text-transform:none;letter-spacing:0}
+.user-selector select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#000;color:#fff;font-size:13px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.user-selector select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,158,255,.12)}
 .user-chip{display:none;position:absolute;z-index:10;left:calc(100% + 24px);top:50%;transform:translateY(-50%)}
 .user-chip.visible{display:block}
 .user-chip::before{content:'';position:absolute;top:50%;right:100%;margin-top:-12px;border:12px solid transparent;border-right-color:rgba(255,255,255,.6)}
 .user-chip img{width:120px;height:120px;border-radius:50%;object-fit:cover;display:block;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .user-chip.silvina{}.user-chip.sandro{}
 .field input{
-  width:100%;padding:13px 16px;background:var(--bg-input);border:1px solid var(--border);
-  border-radius:var(--radius-sm);color:var(--text-primary);font-size:15px;
+  width:100%;padding:13px 16px;background:#000;border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;color:#fff;font-size:15px;
   transition:border-color .2s,box-shadow .2s;
 }
-.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-subtle)}
+.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,158,255,.12)}
+.field input::placeholder{color:rgba(255,255,255,.25)}
 .field .toggle-vis{
   position:absolute;right:12px;bottom:10px;background:none;border:none;
   color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px;line-height:1;
 }
 .btn-primary{
-  width:100%;padding:14px;background:var(--accent);color:white;border:none;
-  border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer;
-  transition:background .2s,transform .1s,box-shadow .2s;margin-top:4px;
+  width:100%;padding:14px;background:linear-gradient(135deg,#5b9eff,#3b82f6);color:white;border:none;
+  border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;
+  transition:transform .15s,box-shadow .2s;margin-top:8px;
   position:relative;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(59,130,246,.3);
 }
-.btn-primary:hover{background:var(--accent-hover);box-shadow:0 0 24px rgba(91,158,255,0.2)}
-.btn-primary:active{transform:scale(.98)}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none;transform:none}
+.btn-primary:hover{box-shadow:0 6px 28px rgba(59,130,246,.45);transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;transform:none}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none}
 .btn-primary.loading .spinner{display:inline-block}
 .btn-primary.loading .btn-text{opacity:.8}
@@ -100,8 +113,8 @@ input,button,textarea{font-family:inherit;font-size:inherit}
 .loading-overlay{position:absolute;inset:0;background:var(--bg-secondary);border-radius:var(--radius-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:10;animation:fadeIn .2s}
 .loading-overlay .spinner-lg{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
 .loading-overlay .loading-text{color:var(--text-secondary);font-size:13px;font-weight:500}
-.error-msg{color:var(--danger);font-size:13px;margin-top:10px;line-height:1.5}
-.info-msg{color:var(--text-muted);font-size:13px;margin-top:10px;line-height:1.5}
+.error-msg{color:#f87171;font-size:13px;margin-top:10px;line-height:1.5;background:rgba(248,113,113,.1);padding:8px 12px;border-radius:8px;border:1px solid rgba(248,113,113,.2)}
+.info-msg{color:rgba(255,255,255,.4);font-size:13px;margin-top:10px;line-height:1.5}
 .strength-wrap{margin-top:8px}
 .strength-track{height:4px;border-radius:2px;background:var(--border);overflow:hidden}
 .strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
@@ -244,7 +257,6 @@ header{
 .detail-meta{font-size:11px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px solid var(--border);line-height:1.7}
 .brand-tag{display:none;font-size:10px;font-weight:600;color:var(--text-primary);margin-left:10px;letter-spacing:.3px;vertical-align:middle;opacity:.85}
 @media(min-width:821px){.brand-tag{display:inline}}
-.brand-foot{text-align:center;margin-top:20px;font-size:10px;color:var(--text-primary);letter-spacing:.5px;opacity:.7}
 .brand-sub{font-size:10px;color:var(--text-primary);letter-spacing:.3px;opacity:.6;margin-top:12px}
 
 /* MODAL */
@@ -336,7 +348,9 @@ header{
   .back-btn:hover{color:var(--text-primary)}
   .search-wrap{max-width:none}
   .timer-text{display:none}
-  .login-card{padding:28px 20px}
+  .login-head{padding:28px 20px 16px;border-radius:16px 16px 10px 10px}
+  .login-body{padding:16px 20px;border-radius:10px}
+  .login-foot{padding:12px 20px;border-radius:10px 10px 16px 16px}
   .detail-card{padding:16px}
   .modal-box{padding:20px;margin:8px}
   .icon-btn{width:40px;height:40px;font-size:20px}
@@ -384,39 +398,44 @@ header{
 
 <div id="screen-login">
   <div class="login-card">
-    <span class="logo-icon">&#x1F510;</span>
-    <h1>SILONET</h1>
-    <p class="subtitle">Bodega WEB</p>
+    <div class="login-head">
+      <div class="logo-glow"></div>
+      <span class="logo-icon">&#x1F510;</span>
+      <h1>SILONET</h1>
+      <p class="subtitle">Bodega WEB</p>
+    </div>
     <div id="login-status" class="info-msg"></div>
-    <div class="user-selector">
-      <label>Usuario</label>
-      <select id="user-select">
-        <option value="">Seleccionar usuario</option>
-        <option value="1">Silvina</option>
-        <option value="2">Sandro</option>
-      </select>
-      <div id="user-chip" class="user-chip"></div>
+    <div class="login-body">
+      <div class="user-selector">
+        <label>Usuario</label>
+        <select id="user-select">
+          <option value="">Seleccionar usuario</option>
+          <option value="1">Silvina</option>
+          <option value="2">Sandro</option>
+        </select>
+        <div id="user-chip" class="user-chip"></div>
+      </div>
+      <div class="field">
+        <label id="password-label">Contrase&ntilde;a Maestra</label>
+        <input type="password" id="master-password" placeholder="Ingrese su contrase&ntilde;a maestra" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        <button class="toggle-vis" id="toggle-password-visibility" type="button" aria-label="Mostrar contrase&ntilde;a">&#x1F441;</button>
+      </div>
+      <div class="field hidden" id="confirm-field">
+        <label>Confirmar Contrase&ntilde;a</label>
+        <input type="password" id="master-password-confirm" placeholder="Confirme su contrase&ntilde;a" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="strength-wrap hidden" id="strength-wrap">
+        <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+      <button class="btn-primary" id="btn-login" disabled><span class="spinner"></span><span class="btn-text">Ingresar</span></button>
+      <div id="login-error" class="error-msg hidden"></div>
+      <div class="login-links">
+        <button onclick="importFromLogin()" class="link-btn">Importar vault desde archivo</button>
+        <button onclick="localStorage.clear();location.reload()" class="link-btn muted">Limpiar vault y empezar de nuevo</button>
+      </div>
     </div>
-    <div class="field">
-      <label id="password-label">Contrase&ntilde;a Maestra</label>
-      <input type="password" id="master-password" placeholder="Ingrese su contrase&ntilde;a maestra" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
-      <button class="toggle-vis" id="toggle-password-visibility" type="button" aria-label="Mostrar contrase&ntilde;a">&#x1F441;</button>
-    </div>
-    <div class="field hidden" id="confirm-field">
-      <label>Confirmar Contrase&ntilde;a</label>
-      <input type="password" id="master-password-confirm" placeholder="Confirme su contrase&ntilde;a" autocomplete="off" autocapitalize="off" spellcheck="false">
-    </div>
-    <div class="strength-wrap hidden" id="strength-wrap">
-      <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
-      <div class="strength-label" id="strength-label"></div>
-    </div>
-    <button class="btn-primary" id="btn-login" disabled><span class="spinner"></span><span class="btn-text">Ingresar</span></button>
-    <div id="login-error" class="error-msg hidden"></div>
-    <div style="text-align:center;margin-top:12px;display:flex;flex-direction:column;gap:6px">
-      <button onclick="importFromLogin()" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline">Importar vault desde archivo</button>
-      <button onclick="localStorage.clear();location.reload()" style="background:none;border:none;color:var(--text-muted);font-size:11px;cursor:pointer;text-decoration:underline">Limpiar vault y empezar de nuevo</button>
-    </div>
-    <div class="brand-foot">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</div>
+    <div class="login-foot">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</div>
     <div id="loading-overlay" class="loading-overlay hidden"><div class="spinner-lg"></div><div class="loading-text" id="loading-text">Derivando clave de cifrado&hellip;</div></div>
   </div>
 </div>
