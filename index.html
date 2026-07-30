@@ -152,7 +152,7 @@ header{
 .search-wrap input::placeholder{color:var(--text-muted)}
 .search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px;pointer-events:none}
 .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.status-dots{display:flex;align-items:center;gap:10px;padding:6px 12px;background:rgba(0,0,0,0.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-right:6px}
+.status-dots-global{position:fixed;top:12px;right:12px;z-index:100;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(0,0,0,0.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:14px}
 .dot-wrap{display:flex;align-items:center;gap:5px;cursor:default;position:relative}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;transition:opacity .3s,box-shadow .3s}
 .dot-pink{background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.4)}
@@ -407,7 +407,7 @@ header{
   .sec-avatar{width:36px;height:36px}
   .user-badge{font-size:0;gap:4px}
   .user-badge img{width:48px;height:48px;border-width:2px}
-  .status-dots{background:none;border:none;padding:4px 8px;gap:6px}
+  .status-dots-global{background:none;border:none;padding:4px 8px;gap:6px;top:8px;right:8px;border-radius:10px}
   .dot{width:8px;height:8px}
   .dot-label{font-size:7px}
   .user-chip{position:static;transform:none;left:auto;top:auto;margin-top:10px}
@@ -479,6 +479,17 @@ header{
   </div>
 </div>
 
+<div class="status-dots-global" id="statusDots">
+  <div class="dot-wrap" id="dot-silvina" title="Silvina Esta Trabajando">
+    <span class="dot dot-pink" data-user="1"></span>
+    <span class="dot-label">Silvina</span>
+  </div>
+  <div class="dot-wrap" id="dot-sandro" title="Sandro Esta Trabajando">
+    <span class="dot dot-blue" data-user="2"></span>
+    <span class="dot-label">Sandro</span>
+  </div>
+</div>
+
 <div id="screen-app" class="hidden">
   <header>
     <div class="app-title">&#x1F510; SILONET <span class="badge" id="entry-badge">0</span><span class="brand-tag">&#x1F331; SANSOFT Engine &#x26A1; Powered by clean code</span></div>
@@ -487,16 +498,6 @@ header{
       <input type="search" id="search-input" placeholder="Buscar servicios o usuarios..." autocomplete="off">
     </div>
     <div class="header-right">
-      <div class="status-dots">
-        <div class="dot-wrap" id="dot-silvina" title="Silvina Esta Trabajando">
-          <span class="dot dot-pink" data-user="1"></span>
-          <span class="dot-label">Silvina</span>
-        </div>
-        <div class="dot-wrap" id="dot-sandro" title="Sandro Esta Trabajando">
-          <span class="dot dot-blue" data-user="2"></span>
-          <span class="dot-label">Sandro</span>
-        </div>
-      </div>
       <span class="user-badge" id="user-badge"></span>
       <span class="timer-text" id="timer-text">&nbsp;<span class="timer-bar"><span class="timer-bar-fill" id="timer-bar-fill" style="width:100%"></span></span></span>
       <button class="icon-btn" id="btn-backup" title="Guardar backup en archivo">&#x1F4BE;</button>
@@ -1635,8 +1636,8 @@ async function tryAutoUnlock(){
   let sess;
   try{sess=JSON.parse(raw)}catch{return false}
   if(!sess||!sess.u||!sess.p)return false;
-  const prevUser=currentUser();
-  if(sess.u!==prevUser)return false;
+  setUser(sess.u);
+  $('user-select').value=sess.u;
   diagMsg('autoUnlock: session found, unlocking...');
   return await unlock(sess.p);
 }
