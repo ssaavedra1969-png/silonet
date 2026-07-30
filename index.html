@@ -153,6 +153,7 @@ header{
 .search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px;pointer-events:none}
 .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .status-dots-global{position:fixed;top:12px;right:12px;z-index:100;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(0,0,0,0.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:14px}
+body.app-active .status-dots-global{display:none}
 .dot-wrap{display:flex;align-items:center;gap:5px;cursor:default;position:relative}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;transition:opacity .3s,box-shadow .3s}
 .dot-pink{background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.4)}
@@ -587,6 +588,7 @@ try{
   if(_s){const _d=JSON.parse(_s);if(_d&&_d.u){
     document.getElementById('screen-login')?.classList.add('hidden');
     document.getElementById('screen-app')?.classList.remove('hidden');
+    document.body.classList.add('app-active');
     const _sel=document.getElementById('user-select');
     if(_sel)_sel.value=_d.u;
   }}
@@ -771,6 +773,7 @@ function lock(){
   clearTimeout(S.inactTimer);S.inactTimer=null;
   clearTimeout(S.clipTimer);S.clipTimer=null;
   try{sessionStorage.removeItem(KEY_SESSION)}catch{}
+  document.body.classList.remove('app-active');
   scrApp.classList.add('hidden');scrLogin.classList.remove('hidden');
   mp.value='';mpc.value='';loginErr.classList.add('hidden');cf.classList.add('hidden');sw.classList.add('hidden');
   loginBtn.disabled=true;loginBtn.classList.remove('loading');pDetail.classList.remove('open');eDetail.classList.add('hidden');emptySt.classList.remove('hidden');
@@ -796,6 +799,7 @@ async function unlock(pw){
     try{sessionStorage.setItem(KEY_SESSION,JSON.stringify({u:currentUser(),p:pw}))}catch{}
     loadingOverlay.classList.add('hidden');
     scrLogin.classList.add('hidden');scrApp.classList.remove('hidden');
+    document.body.classList.add('app-active');
     searchIn.value='';S.search='';
     render();resetInact();showUserBadge();diagMsg('unlock: COMPLETE');return true;
   }catch(e){
