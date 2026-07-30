@@ -1463,7 +1463,7 @@ mpc.addEventListener('keydown',e=>{if(e.key==='Enter'&&!loginBtn.disabled)loginB
 toggleVis.addEventListener('click',()=>{
   const is=mp.type==='password';
   mp.type=is?'text':'password';mpc.type=is?'text':'password';
-  toggleVis.textContent=is?'&#x1F648;':'&#x1F441;';
+  toggleVis.textContent=is?'\uD83D\uDC41':'\uD83D\uDE48';
   toggleVis.style.color=is?'var(--accent)':'var(--text-muted)';
 });
 $('user-select').addEventListener('change',async function(){
@@ -1477,6 +1477,7 @@ $('user-select').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDef
 showUserBadge();
 
 loginBtn.addEventListener('click',async(e)=>{
+  const sel=$('user-select');
   const rect=loginBtn.getBoundingClientRect();
   const r=document.createElement('span');r.className='ripple';
   const size=Math.max(rect.width,rect.height);
