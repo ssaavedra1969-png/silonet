@@ -610,15 +610,6 @@ function updateStatusDots(){
     else{dot.classList.add('inactive');dot.classList.remove('active')}
   }
 }
-function sendLoginWsp(uid){
-  const other=uid==='1'?'2':'1';
-  const name=USER_NAMES[uid].toUpperCase();
-  const phone=USER_PHONES[other];
-  if(!phone)return;
-  const a=document.createElement('a');
-  a.href='https://wa.me/'+phone+'?text='+encodeURIComponent(name+' ESTA CONECTADA');
-  a.target='_blank';a.rel='noopener';a.click();
-}
 const USER_NAMES={'1':'Silvina','2':'Sandro'};
 const USER_PHONES={'1':'5491138674644','2':'5491141751031'};
 function showUserBadge(){
@@ -1611,7 +1602,6 @@ loginBtn.addEventListener('click',async(e)=>{
   loginBtn.classList.remove('loading');
   btnText.textContent='Ingresar';
   mp.value='';mpc.value='';
-  sendLoginWsp(sel.value);
   diagMsg('click: success');
 });
 
